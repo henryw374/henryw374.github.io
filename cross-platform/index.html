@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simplify Your Business Logic – Henry Widd's Blog – Widd Industries</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="A brief explanation of how to leverage your business logic code as much as possible by Simplifying it, with some specific tips for Clojure developers,
+including using the cross-platform tick date/time library.
+" />
+    <meta property="og:description" content="A brief explanation of how to leverage your business logic code as much as possible by Simplifying it, with some specific tips for Clojure developers,
+including using the cross-platform tick date/time library.
+" />
+    
+    <meta name="author" content="Henry Widd's Blog" />
+
+    
+    <meta property="og:title" content="Simplify Your Business Logic" />
+    <meta property="twitter:title" content="Simplify Your Business Logic" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Henry Widd's Blog - Widd Industries" href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+      <script data-ad-client="ca-pub-8297539495195641" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://avatars0.githubusercontent.com/u/3070220?s=400&u=a24a48324882a361ab3dc02dd865ec9b71c079d1&v=4" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Henry Widd's Blog</a></h1>
+            <p class="site-description">Widd Industries</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Simplify Your Business Logic</h1>
+
+  <div class="entry">
+    <p>A brief explanation of how to leverage your business logic code as much as possible by <a href="https://www.infoq.com/presentations/Simple-Made-Easy">Simplifying</a> it, with some specific tips for Clojure developers,
+including using the cross-platform <a href="https://github.com/juxt/tick">tick</a> date/time library.</p>
+
+<h2 id="separate-decisions-from-dependencies">Separate Decisions from Dependencies</h2>
+
+<p>The idea to ‘Separate Decisions from Dependencies’ is to only use pure functions for writing code that ‘makes decisions’
+and wire those functions together as necessary with all the plumbing bits of your system (that’ll get your data to and from databases/services/users etc).
+ Rich Hickey would call such a separation a <a href="https://www.infoq.com/presentations/Simple-Made-Easy">Simplification</a>.</p>
+
+<p>Maybe you think you are doing this already, but ask yourself:</p>
+
+<p><strong>Is all your business logic available cross-platform?</strong></p>
+
+<p>For Clojurists that means your business logic is (or could be) in .cljc files. For 
+JS/Node developers that generally means all your business logic modules are free of IO.</p>
+
+<p>Doing this should be zero-cost, but I rarely see it in the wild.</p>
+
+<h3 id="why-cross-platform-">Why Cross-Platform ?</h3>
+
+<p>Many authors and speakers have expounded the virtues of <em>Separating Decisions from Dependencies</em>  or <em>Isolating Computation From State</em> [1], typically
+citing reliability/testability/visibility as benefits. I am totally in agreement with them, but why go 
+further and say Decisions code must be cross platform?</p>
+
+<p>Thinking here of a typical modern web/mobile application, we have situations like:</p>
+
+<ul>
+  <li>
+    <p>A user of the front end wants to explore taking an action of some sort and the app needs to respond as fast as
+possible to show consequences, ideally without any server round-trip. Then later, on completion, some back end code must validate
+the input, use it to carry out actions, schedule jobs &amp; etc.</p>
+  </li>
+  <li>
+    <p>A screen of the app shows the user some derived data. The app also needs to periodically email users
+with the same derived data (think bank account summary).</p>
+  </li>
+  <li>
+    <p>A screen in the app shows a data summary of some sort. A user can drill-down into some detail and the server
+sends more specific data covering the required slice of the overall dataset. Some of the calculations on the detail screen are
+ the same as those that were used to make the output for the summary screen.</p>
+  </li>
+</ul>
+
+<p>In all these situations we need to have the same logic wherever the app runs.</p>
+
+<p>Cross-Platform business logic is not typically available in stacks where the various app components (web ui, mobile app, server)
+are on disparate platforms. Clojure and Node are two stacks where I’ve personally used this idea to great effect, including on Mobile applications written on 
+React Native.</p>
+
+<p>Briefly stated, if you’ve not got cross-platform logic the problems you might have are:</p>
+
+<ul>
+  <li>Needless duplication - I don’t need to say any more</li>
+  <li>Storing up trouble - “User: Ooh, nice feature, can we have that on the <em>insert other platform here</em> as well?”</li>
+  <li>Decisions relying on Dependencies - usually cases that somehow slipped in when you weren’t looking</li>
+</ul>
+
+<h3 id="known-issues">Known Issues?</h3>
+
+<p>The JVM and JS runtimes differ significantly, for the purposes of business logic that usually means:</p>
+
+<ul>
+  <li>Dates &amp; Times: Until now, we’ve been making do with clj/s-time [2] but now there is a better 
+option <strong><a href="https://github.com/juxt/tick">tick</a></strong>, which is an intuitive Clojure(Script) api over the <em>java.time</em> api.</li>
+  <li>Numbers: There’s just the one number type in JS, but many on the JVM. This may be a blocker for some, I’ll aim to revisit in a later post.</li>
+  <li>String Formatting: No clojure.core/format equivalent exists in Cljs. Instead try <a href="https://github.com/alexei/sprintf.js">Sprintf</a></li>
+</ul>
+
+<p>[1] A couple of my favourites are Gary Bernhardt’s <a href="https://eventil.com/talks/jYSOmz-gary-bernhardt-boundaries">Boundaries</a>
+ and Stuart Sierra’s <a href="https://www.infoq.com/presentations/Thinking-in-Data">Thinking in Data</a>.</p>
+
+<p>[2] <a href="https://github.com/andrewmcveigh/cljs-time">cljs-time</a> only partially implements clj-time. Working in finance as I mostly do, dates are everywhere and the 
+differences too often <a href="https://github.com/andrewmcveigh/cljs-time/issues/92">leak out</a></p>
+
+  </div>
+
+  <div class="date">
+    Written on September 17, 2018
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'widdindustries';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/henryw374"><i class="svg-icon github"></i></a>
+
+
+
+<a href="/feed.xml"><i class="svg-icon rss"></i></a>
+<a href="https://www.twitter.com/henryw374"><i class="svg-icon twitter"></i></a>
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    <style>
+    #cookie-notice {padding: 0.5rem 1rem; display: none; text-align: center; position: fixed; bottom: 0; width: calc(100% - 2rem); background: #222; color: rgba(255,255,255,0.8);}
+    #cookie-notice a {display: inline-block; cursor: pointer; margin-left: 0.5rem;}
+    @media (max-width: 767px) {
+        #cookie-notice span {display: block; padding-top: 3px; margin-bottom: 1rem;}
+        #cookie-notice a {position: relative; bottom: 4px;}
+    }
+</style>
+<div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.</span><a id="cookie-notice-accept" class="btn btn-primary btn-sm">Approve</a><a href="/privacy" class="btn btn-primary btn-sm">More info</a></div>
+<script>
+    function createCookie(name,value,days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
+    function readCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+    function eraseCookie(name) {
+        createCookie(name,"",-1);
+    }
+
+    if(readCookie('cookie-notice-dismissed')=='true') {
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-131917038-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/cross-platform/',
+		  'title': 'Simplify Your Business Logic'
+		});
+    } else {
+        document.getElementById('cookie-notice').style.display = 'block';
+    }
+    document.getElementById('cookie-notice-accept').addEventListener("click",function() {
+        createCookie('cookie-notice-dismissed','true',31);
+        document.getElementById('cookie-notice').style.display = 'none';
+        location.reload();
+    });
+
+</script>
+
+  </body>
+</html>
