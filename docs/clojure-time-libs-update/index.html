@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Progress update on the Clojure(Script) date-time libraries – Henry Widd's Blog – Widd Industries</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="In April 2019 I gave a talk at Clojure/North providing my motivation for working on new date-time libraries: cljc.java-time, time-literals and tick. Yes, you heard right, yet more date-time libraries! In the talk I argue that they provide novelty with respect to cross-platform development and improve the overall situation for Clojurescript date-time work. This post gives some updates on what has happened since and considers future developments for these libraries.
+" />
+    <meta property="og:description" content="In April 2019 I gave a talk at Clojure/North providing my motivation for working on new date-time libraries: cljc.java-time, time-literals and tick. Yes, you heard right, yet more date-time libraries! In the talk I argue that they provide novelty with respect to cross-platform development and improve the overall situation for Clojurescript date-time work. This post gives some updates on what has happened since and considers future developments for these libraries.
+" />
+    
+    <meta name="author" content="Henry Widd's Blog" />
+
+    
+    <meta property="og:title" content="Progress update on the Clojure(Script) date-time libraries" />
+    <meta property="twitter:title" content="Progress update on the Clojure(Script) date-time libraries" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Henry Widd's Blog - Widd Industries" href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+      <script data-ad-client="ca-pub-8297539495195641" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://avatars0.githubusercontent.com/u/3070220?s=400&u=a24a48324882a361ab3dc02dd865ec9b71c079d1&v=4" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Henry Widd's Blog</a></h1>
+            <p class="site-description">Widd Industries</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Progress update on the Clojure(Script) date-time libraries</h1>
+
+  <div class="entry">
+    <p>In April 2019 I gave a <a href="https://www.youtube.com/watch?v=UFuL-ZDoB2U">talk at Clojure/North</a> providing my motivation for working on new date-time libraries: <code class="language-plaintext highlighter-rouge">cljc.java-time</code>, <code class="language-plaintext highlighter-rouge">time-literals</code> and <code class="language-plaintext highlighter-rouge">tick</code>. Yes, you heard right, yet more date-time libraries! In the talk I argue that they provide novelty with respect to cross-platform development and improve the overall situation for Clojurescript date-time work. This post gives some updates on what has happened since and considers future developments for these libraries.</p>
+
+<p>It’s always hard to know how much usage open source projects are getting, but these young libraries are definitely seeing some healthy activity in terms of Github issues, contributions and stars. As expected, tick has had the majority of activity, but I’m aware of people using the ancillary libs in isolation too.</p>
+
+<p>For the rest of the post I’ll talk about the todo list that I presented in the Clojure/North talk, how it has progressed and what’s new on the list. I’d welcome PRs on any of these items but if you want any of them expedited by myself then please <a href="http://widdindustries.com/about/">get in touch</a></p>
+
+<h1 id="time-literals"><a href="https://github.com/henryw374/time-literals">Time Literals</a></h1>
+
+<p>Useful to any Clojurist working with java.time, either with or without a wrapper library. java.time entities are printed as tagged literals that can be pasted back in to the REPL, written to files, sent over the wire and so on.</p>
+
+<p>Examples:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> #time/date"1969-07-20"
+ #time/time"20:17"
+</code></pre></div></div>
+
+<h2 id="todo">Todo</h2>
+
+<p>There has been some interest in having Transit encodings using the literals. Support for the <code class="language-plaintext highlighter-rouge">datafy/nav</code> is another possible feature, but although it has a similar theme of representing data, it isn’t that closely related to <code class="language-plaintext highlighter-rouge">time-literals</code> so might live in a separate repo.</p>
+
+<h1 id="cljcjava-time"><a href="https://github.com/henryw374/cljc.java-time">cljc.java-time</a></h1>
+
+<p>This is a  Clojure(Script) library that mirrors the java.time api through kebab-case-named vars.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(ns my.cljc
+  (:require  [cljc.java-time.local-date :as ld])
+  
+  ;create a date
+  (def a-date (ld/parse "2019-01-01"))
+  
+  ;add some days
+  (ld/plus-days a-date 99)
+</code></pre></div></div>
+
+<h2 id="progress">Progress</h2>
+
+<p>As this library only aims to mirror java.time and is generated from it, the api was essentially ‘done’ on the first release. The type hinting has been improved since then, thanks to work which has now become <a href="https://github.com/emlyn/tortilla">Tortilla</a>)</p>
+
+<p>Having (clojure.spec) specs and generators for java.time is something I <a href="https://github.com/henryw374/time-literals">made a start</a> on, but while spec itself is changing then any lib using it is going to be subject to the same flux. There has been some interest in having <a href="https://github.com/metosin/malli">Malli</a> use cljc.java-time for it’s date and time logic, but IMO cljc.java-time brings too much baggage on the Clojurescript side - although read on to the next section for a possible way through for this and other libraries.</p>
+
+<p>Whatever direction these specification efforts take, a set of predicate functions for the java.time entities is a generally useful thing and a recent contribution to cljc.java-time added instance predicates for all java.time entities, for example <code class="language-plaintext highlighter-rouge">(date? x)</code>.</p>
+
+<p>The other <a href="https://github.com/henryw374/cljc.java-time/issues">open issues</a> are about listing discrepancies between the underlying time libs and wrapping the further flung corners of java.time.</p>
+
+<h1 id="cljsjava-time"><a href="https://github.com/henryw374/cljs.java-time">cljs.java-time</a></h1>
+
+<p>This Clojurescript library is used by <code class="language-plaintext highlighter-rouge">cljc.java-time</code> (see above). It exposes the npm library <a href="https://github.com/js-joda/js-joda">Js-Joda</a> (a faithful and mostly complete JS implementation of java.time) and extends the Clojurescript equivalence, comparison and hashing protocols to its entitites.</p>
+
+<p>Because js-joda existed, it was a relatively small step to make a cross-platform time library, but although it is an enabler it is also something of a hindrance for two main reasons:</p>
+
+<p>1) The myriad ways Clojurescript users consume npm libraries</p>
+
+<p>2) It’s size (minimum of 43k, gzipped)</p>
+
+<p>On point 1), making a Clojurescript library that uses an npm lib sometimes feels a bit like being in the wild west, but at the end of the day, whatever setup you have it’s not too hard to get this library working and if you can consume foreign-libs, it ‘just works’ out of the box. Having a single command that will drop you into a node repl with tick is pretty cool, for example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>clj -Sdeps '{:deps {org.clojure/clojurescript {:mvn/version "1.10.597" } tick {:mvn/version "0.4.23-alpha"} }}' -m cljs.main  -re node  --repl
+</code></pre></div></div>
+
+<p>Regarding point 2), I would say that in many contexts (including client projects I am currently engaged in) the size is simply not an issue when trading off</p>
+
+<ul>
+  <li>utility</li>
+  <li>overall build size</li>
+  <li>actual end user’s experience</li>
+</ul>
+
+<p>In other contexts the size would be a problem though. I have briefly looked into reducing its size through minification &amp; Dead Code Elimination and although I’ve made a little progress I don’t think it’s going to be possible to reduce it enough to bring it down hugely or to be on a par with <code class="language-plaintext highlighter-rouge">goog.date</code>.</p>
+
+<p>These two issues together mean that <code class="language-plaintext highlighter-rouge">cljs.java-time</code> &amp; related libs probably aren’t going to be used by other Clojure(Script) libraries needing date/time functions.</p>
+
+<p>I’d say the best looking solution on the horizon is the new platform date-time library being developed for Javascript aka <a href="https://github.com/tc39/proposal-temporal">tc-39/proposal-temporal</a> (hereafter PT). If JS had a good date-time api built-in then it wouldn’t be necessary to bring your own of course, so no need for Js-Joda and problems 1) and 2) go away, simples!</p>
+
+<p>The PT api is currently being finalized and experimental work is underway to reimplement <a href="https://github.com/moment/moment">Moment.js</a> with it. How far away it is from being included in the next version of Node, Chrome etc I really can’t say. Even when it is there, the world’s browsers won’t get upgraded overnight so polyfills will be needed for some time in many cases.</p>
+
+<p>That aside, what does PT look like? Unfortunately from a cross-platform lib developer’s PoV it is not that similar to java.time. Some obvious differences are naming and the entities where methods reside. Also there is no ZonedDateTime and the Duration and Period classes have been combined. However, although it looks pretty different, my feeling is that the differences are quite superficial. If you wanted a cross platform Clojure api that used PT and java.time, I think extending tick’s protocols to the PT entities would likely be a good starting point, so you might end up with a <code class="language-plaintext highlighter-rouge">tick-lite</code> that doesn’t use js-joda or any npm lib.</p>
+
+<h1 id="tick"><a href="https://github.com/juxt/tick">tick</a></h1>
+
+<p>This is a <a href="https://juxt.pro/index.html">Juxt</a> library that I made cross-platform and am now helping to maintain. I’ll try to briefly describe it as having the following features:</p>
+
+<p>1) A single-ns, intuitive api over java.time</p>
+
+<p>2) Batteries-included - it depends on and configures <code class="language-plaintext highlighter-rouge">cljc.java-time</code>, <code class="language-plaintext highlighter-rouge">time-literals</code> &amp; additional js-joda locale &amp; timezone libs</p>
+
+<p>3) Power tools - Interval Algebra and Scheduling</p>
+
+<p>Unsurprisingly <code class="language-plaintext highlighter-rouge">tick</code> appears to have the most traction of all the libs (despite its alpha status) and it’s been great to see a number of bug fixes and minor contributions from the community since April.</p>
+
+<p>In the main api the things I’d most like to be addressed include:</p>
+
+<ul>
+  <li>parsing (defer to DateTimeFormatter entirely)</li>
+  <li>another look at <code class="language-plaintext highlighter-rouge">&gt;&gt;/&lt;&lt;</code> vs <code class="language-plaintext highlighter-rouge">+/-</code> and <code class="language-plaintext highlighter-rouge">range</code></li>
+  <li>more <a href="https://juxt.pro/tick/docs/index.html">documentation of tick</a>.</li>
+</ul>
+
+<p>See the full list of <a href="https://github.com/juxt/tick/issues">issues</a> for other open items.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>It has been good to see a positive response to the talk and the libraries. In summary, there have been some minor bug fixes &amp; tweaks since April, but I’ve outlined what I see as some potential features that could exist in future - if people want them! As I say, I’d welcome PRs on any of these items but if you want any of them expedited by myself then please <a href="http://widdindustries.com/about/">get in touch</a>.</p>
+
+  </div>
+
+  <div class="date">
+    Written on January  5, 2020
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'widdindustries';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/henryw374"><i class="svg-icon github"></i></a>
+
+
+
+<a href="/feed.xml"><i class="svg-icon rss"></i></a>
+<a href="https://www.twitter.com/henryw374"><i class="svg-icon twitter"></i></a>
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    <style>
+    #cookie-notice {padding: 0.5rem 1rem; display: none; text-align: center; position: fixed; bottom: 0; width: calc(100% - 2rem); background: #222; color: rgba(255,255,255,0.8);}
+    #cookie-notice a {display: inline-block; cursor: pointer; margin-left: 0.5rem;}
+    @media (max-width: 767px) {
+        #cookie-notice span {display: block; padding-top: 3px; margin-bottom: 1rem;}
+        #cookie-notice a {position: relative; bottom: 4px;}
+    }
+</style>
+<div id="cookie-notice"><span>We would like to use third party cookies and scripts to improve the functionality of this website.</span><a id="cookie-notice-accept" class="btn btn-primary btn-sm">Approve</a><a href="/privacy" class="btn btn-primary btn-sm">More info</a></div>
+<script>
+    function createCookie(name,value,days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
+    function readCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+    function eraseCookie(name) {
+        createCookie(name,"",-1);
+    }
+
+    if(readCookie('cookie-notice-dismissed')=='true') {
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-131917038-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/clojure-time-libs-update/',
+		  'title': 'Progress update on the Clojure(Script) date-time libraries'
+		});
+    } else {
+        document.getElementById('cookie-notice').style.display = 'block';
+    }
+    document.getElementById('cookie-notice-accept').addEventListener("click",function() {
+        createCookie('cookie-notice-dismissed','true',31);
+        document.getElementById('cookie-notice').style.display = 'none';
+        location.reload();
+    });
+
+</script>
+
+  </body>
+</html>
