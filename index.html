@@ -1,220 +1,75 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Henry Widd's Blog – Widd Industries</title>
+    <title>Widd Industries</title>
 
         <meta charset="utf-8" />
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
-
-    
     <meta name="description" content="Widd Industries">
     <meta property="og:description" content="Widd Industries" />
-    
-    <meta name="author" content="Henry Widd's Blog" />
+    <meta name="author" content="Widd Industries" />
+      <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+      <link rel="manifest" href="/site.webmanifest">
+      <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+      <meta name="msapplication-TileColor" content="#da532c">
+      <meta name="theme-color" content="#ffffff">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300&display=swap" rel="stylesheet">
 
     
 
     <!--[if lt IE 9]>
       <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+      
+      <style>
+      
+      @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@300&display=swap');
+      
+      body {
+      font-family: 'Oxanium', cursive;      
+  display: grid;
+  height: 100vh;
+  grid-template-rows: auto 1fr auto;
+}
 
-    <link rel="stylesheet" type="text/css" href="/style.css" />
-    <link rel="alternate" type="application/rss+xml" title="Henry Widd's Blog - Widd Industries" href="/feed.xml" />
+header {
+  padding: 2rem;
+}
 
-    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+main {
+  display:grid;place-items:center;
+}
+
+footer {
+  padding: 2rem;
+  text-align: center;
+}
+
+      
+  </style>
+
       <script data-ad-client="ca-pub-8297539495195641" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
   </head>
 
   <body>
-    <div class="wrapper-masthead">
-      <div class="container">
-        <header class="masthead clearfix">
-          <a href="/" class="site-avatar"><img src="https://avatars0.githubusercontent.com/u/3070220?s=400&u=a24a48324882a361ab3dc02dd865ec9b71c079d1&v=4" /></a>
-
-          <div class="site-info">
-            <h1 class="site-name"><a href="/">Henry Widd's Blog</a></h1>
-            <p class="site-description">Widd Industries</p>
-          </div>
-
-          <nav>
-            <a href="/">Blog</a>
-            <a href="/about">About</a>
-          </nav>
-        </header>
-      </div>
-    </div>
-
-    <div id="main" role="main" class="container">
-      <div class="posts">
   
-    <article class="post">
-
-      <h1><a href="/clojurescript-jsinterop/">Accessing Javascript objects from Clojurescript</a></h1>
-
-      <div class="entry">
-        Using dot-access vs goog.object vs something else
-      </div>
-
-      <a href="/clojurescript-jsinterop/" class="read-more">Read More</a>
-    </article>
+      <header style="display:grid;place-items:center;">
+          <img src="/assets/widd-industries-logo.svg"
+               height="150px"/>
+      </header>
+      <main>
+          <a href="/blog">Blog</a>
+      </main>
+      <footer>© Widd Industries Ltd 2023</footer>
   
-    <article class="post">
-
-      <h1><a href="/clojurescript-firebase-simple/">Wrapper-free Firebase with Clojurescript's Re-Frame</a></h1>
-
-      <div class="entry">
-        
-      </div>
-
-      <a href="/clojurescript-firebase-simple/" class="read-more">Read More</a>
-    </article>
-  
-    <article class="post">
-
-      <h1><a href="/why-not-interop/">Why not Interop with java.time?</a></h1>
-
-      <div class="entry">
-        Using interop syntax with the java.time API is not wrong, but there is an alternative that is superior in every respect - and it just got much better
-      </div>
-
-      <a href="/why-not-interop/" class="read-more">Read More</a>
-    </article>
-  
-    <article class="post">
-
-      <h1><a href="/ecma-temporal-vs-java-time/">Temporal (Javascript's new Date-Time API) vs java.time (JSJoda on JS runtimes)</a></h1>
-
-      <div class="entry">
-        Javascript is getting a new platform Date-Time Library, called Temporal
-      </div>
-
-      <a href="/ecma-temporal-vs-java-time/" class="read-more">Read More</a>
-    </article>
-  
-    <article class="post">
-
-      <h1><a href="/tick-with-shadow-just-works/">Clojure(Script) date-time libs, Shadow-cljs & Babashka</a></h1>
-
-      <div class="entry">
-        Small but significant releases for npm and babashka users
-      </div>
-
-      <a href="/tick-with-shadow-just-works/" class="read-more">Read More</a>
-    </article>
-  
-    <article class="post">
-
-      <h1><a href="/cljs-npm-libraries/">How to package Clojurescript libraries</a></h1>
-
-      <div class="entry">
-        Mostly about npm dependencies of course!
-      </div>
-
-      <a href="/cljs-npm-libraries/" class="read-more">Read More</a>
-    </article>
-  
-    <article class="post">
-
-      <h1><a href="/clojure-time-libs-update/">Progress update on the Clojure(Script) date-time libraries</a></h1>
-
-      <div class="entry">
-        News since Clojure North 2019
-      </div>
-
-      <a href="/clojure-time-libs-update/" class="read-more">Read More</a>
-    </article>
-  
-    <article class="post">
-
-      <h1><a href="/cljs-async-tests/">Less Boilerplate in Cljs Async Tests</a></h1>
-
-      <div class="entry">
-        Removing some boilerplate from async Clojurescript tests
-      </div>
-
-      <a href="/cljs-async-tests/" class="read-more">Read More</a>
-    </article>
-  
-    <article class="post">
-
-      <h1><a href="/clojure-north/">Cross-Platform Date-Time Awesomeness</a></h1>
-
-      <div class="entry">
-        My talk from Clojure/North 2019, https://www.youtube.com/watch?v=UFuL-ZDoB2U
-      </div>
-
-      <a href="/clojure-north/" class="read-more">Read More</a>
-    </article>
-  
-    <article class="post">
-
-      <h1><a href="/with-redefs-problems/">When to avoid with-redefs</a></h1>
-
-      <div class="entry">
-        Choosing and troubleshooting clojure.core/with-redefs
-      </div>
-
-      <a href="/with-redefs-problems/" class="read-more">Read More</a>
-    </article>
-  
-    <article class="post">
-
-      <h1><a href="/cross-platform-clojure-tick/">Cross Platform Awesomeness</a></h1>
-
-      <div class="entry">
-        In many domains, writing code that runs cross platform is a big win. However, there's more to this than changing file extensions to .cljc. This talk explains the why and how of cross platform Clojure and demonstrates a new date/time library 'tick' that goes a long way to enabling cross platform programs.
-      </div>
-
-      <a href="/cross-platform-clojure-tick/" class="read-more">Read More</a>
-    </article>
-  
-    <article class="post">
-
-      <h1><a href="/cross-platform/">Simplify Your Business Logic</a></h1>
-
-      <div class="entry">
-        A brief explanation of how to leverage your business logic code as much as possible it, with some specific tips for Clojure developers about using the cross-platform [tick](https://github.com/juxt/tick) date/time library.
-      </div>
-
-      <a href="/cross-platform/" class="read-more">Read More</a>
-    </article>
-  
-    <article class="post">
-
-      <h1><a href="/Hello/">Hello, World!</a></h1>
-
-      <div class="entry">
-        A new 'web log' is born
-      </div>
-
-      <a href="/Hello/" class="read-more">Read More</a>
-    </article>
-  
-</div>
-
-    </div>
-
-    <div class="wrapper-footer">
-      <div class="container">
-        <footer class="footer">
-          
-
-
-
-<a href="https://github.com/henryw374"><i class="svg-icon github"></i></a>
-
-
-
-<a href="/feed.xml"><i class="svg-icon rss"></i></a>
-<a href="https://www.twitter.com/henryw374"><i class="svg-icon twitter"></i></a>
-
-
-
-        </footer>
-      </div>
-    </div>
 
     <style>
     #cookie-notice {padding: 0.5rem 1rem; display: none; text-align: center; position: fixed; bottom: 0; width: calc(100% - 2rem); background: #222; color: rgba(255,255,255,0.8);}
